@@ -3,18 +3,16 @@ package com.example.android
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
-import com.example.android.api.AuthApi
 import com.example.android.api.provideAuthApi
 import com.example.android.model.GithubAccessToken
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.sdk27.coroutines.onClick
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,8 +21,8 @@ class SignInActivity : AppCompatActivity() {
 
     lateinit var btnStart: Button
     lateinit var progress: ProgressBar
-    lateinit var api: AuthApi
-    lateinit var authTokenProvider: AuthTokenProvider
+    internal val api by lazy { provideAuthApi() }
+    internal val authTokenProvider by lazy { AuthTokenProvider(this) }
     lateinit var accessTokenCall: Call<GithubAccessToken>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +31,7 @@ class SignInActivity : AppCompatActivity() {
 
         btnStart = findViewById(R.id.btn_signin_github)
 
-        btnStart.onClick {
+        btnStart.setOnClickListener {
             val authUri = Uri.Builder().scheme("https")
                 .authority("github.com")
                 .appendPath("login")
@@ -45,13 +43,11 @@ class SignInActivity : AppCompatActivity() {
 
             val intent = CustomTabsIntent.Builder().build()
             intent.launchUrl(this@SignInActivity, authUri)
+
         }
 
-        api = provideAuthApi()
-        authTokenProvider = AuthTokenProvider(this)
-
         if (null != authTokenProvider.token) {
-            startActivity<MainActivity>()
+            launchMainActivity()
         }
     }
 
@@ -78,25 +74,28 @@ class SignInActivity : AppCompatActivity() {
         accessTokenCall = api.getAccessToken(
             BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
 
-        accessTokenCall!!.enqueue(object: Callback<GithubAccessToken> {
+        accessTokenCall.enqueue(object: Callback<GithubAccessToken> {
             override fun onResponse(call: Call<GithubAccessToken>, response: Response<GithubAccessToken>) {
                 hideProgress()
 
                 val token: GithubAccessToken? = response.body()
                 if (response.isSuccessful() && null != token) {
                     authTokenProvider.updateToken(token.accessToken)
+                    Log.d("login", "okay")
 
                     startActivity<MainActivity>()
                 } else {
                     showError(IllegalStateException(
                         "Not successful: " + response.message()
                     ))
+                    Log.d("login", "what")
                 }
             }
 
             override fun onFailure(call: Call<GithubAccessToken>, t: Throwable) {
                 hideProgress()
                 showError(t)
+                Log.d("login", "failure")
             }
         })
     }
@@ -113,5 +112,9 @@ class SignInActivity : AppCompatActivity() {
 
     private fun showError(throwable: Throwable) {
         longToast(throwable.message ?: "No message available")
+    }
+
+    private fun launchMainActivity() {
+        startActivity(intentFor<MainActivity>().clearTask().newTask())
     }
 }
