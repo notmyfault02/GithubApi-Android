@@ -8,6 +8,7 @@ class AuthTokenProvider(private val context: Context) {
     companion object {
         private val KEY_AUTH_TOKEN = "auth_token"
     }
+
     fun updateToken(token: String) {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
             .putString(KEY_AUTH_TOKEN, token)

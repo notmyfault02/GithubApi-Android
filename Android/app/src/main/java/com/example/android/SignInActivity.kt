@@ -3,7 +3,6 @@ package com.example.android
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -13,6 +12,7 @@ import com.example.android.api.provideAuthApi
 import com.example.android.model.GithubAccessToken
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +20,8 @@ import retrofit2.Response
 class SignInActivity : AppCompatActivity() {
 
     lateinit var btnStart: Button
+
+    lateinit var btnTest: Button
     lateinit var progress: ProgressBar
     internal val api by lazy { provideAuthApi() }
     internal val authTokenProvider by lazy { AuthTokenProvider(this) }
@@ -46,6 +48,11 @@ class SignInActivity : AppCompatActivity() {
 
         }
 
+        btnTest = findViewById(R.id.button_test)
+
+        btnTest.onClick { startActivity<MainActivity>() }
+
+
         if (null != authTokenProvider.token) {
             launchMainActivity()
         }
@@ -68,34 +75,63 @@ class SignInActivity : AppCompatActivity() {
         getAccessToken(code)
     }
 
+//    private fun getAccessToken(code: String) {
+//        showProgress()
+//
+//        accessTokenCall = api.getAccessToken(
+//            BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
+//
+//        accessTokenCall.enqueue(object: Callback<GithubAccessToken> {
+//            override fun onResponse(call: Call<GithubAccessToken>, response: Response<GithubAccessToken>) {
+//                hideProgress()
+//
+//                val token: GithubAccessToken? = response.body()
+//                if (response.isSuccessful() && null != token) {
+//                    authTokenProvider.updateToken(token.accessToken)
+//                    Log.d("login", "okay")
+//
+//                    launchMainActivity()
+//                } else {
+//                    showError(IllegalStateException(
+//                        "Not successful: " + response.message()
+//                    ))
+//                    Log.d("login", "what")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<GithubAccessToken>, t: Throwable) {
+//                hideProgress()
+//                showError(t)
+//                Log.d("login", "failure")
+//            }
+//        })
+//    }
+
     private fun getAccessToken(code: String) {
         showProgress()
 
         accessTokenCall = api.getAccessToken(
             BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
 
-        accessTokenCall.enqueue(object: Callback<GithubAccessToken> {
-            override fun onResponse(call: Call<GithubAccessToken>, response: Response<GithubAccessToken>) {
+        accessTokenCall!!.enqueue(object : Callback<GithubAccessToken> {
+            override fun onResponse(call: Call<GithubAccessToken>,
+                                    response: Response<GithubAccessToken>) {
                 hideProgress()
 
-                val token: GithubAccessToken? = response.body()
-                if (response.isSuccessful() && null != token) {
+                val token = response.body()
+                if (response.isSuccessful && null != token) {
                     authTokenProvider.updateToken(token.accessToken)
-                    Log.d("login", "okay")
 
-                    startActivity<MainActivity>()
+                    launchMainActivity()
                 } else {
                     showError(IllegalStateException(
-                        "Not successful: " + response.message()
-                    ))
-                    Log.d("login", "what")
+                        "Not successful: " + response.message()))
                 }
             }
 
             override fun onFailure(call: Call<GithubAccessToken>, t: Throwable) {
                 hideProgress()
                 showError(t)
-                Log.d("login", "failure")
             }
         })
     }
