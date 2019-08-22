@@ -1,4 +1,4 @@
-package com.example.android
+package com.example.android.data.remote
 
 import android.content.Context
 import android.preference.PreferenceManager

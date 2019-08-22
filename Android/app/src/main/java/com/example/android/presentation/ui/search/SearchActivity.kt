@@ -1,4 +1,4 @@
-package com.example.android
+package com.example.android.presentation.ui.search
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,19 +7,19 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.api.GithubApi
+import com.example.android.R
+import com.example.android.data.remote.GithubApi
 import com.example.android.model.RepoSearchResponse
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), SearchContract.View {
+
+    override lateinit var presenter: SearchContract.Presenter
 
     lateinit var rvList: RecyclerView
     lateinit var progress: ProgressBar
     lateinit var tvMessage: TextView
     lateinit var menuSearch: MenuItem
     lateinit var searchView: SearchView
-//    lateinit var adapter by lazy {
-//        SearchAdapter().apply { setItemClickListener(this@SearchActivity) }
-//    }
     lateinit var api: GithubApi
     lateinit var searchCall: retrofit2.Call<RepoSearchResponse>
 

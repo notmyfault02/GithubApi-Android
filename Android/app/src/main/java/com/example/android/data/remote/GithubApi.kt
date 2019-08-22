@@ -1,4 +1,4 @@
-package com.example.android.api
+package com.example.android.data.remote
 
 import com.example.android.model.GithubRepo
 import com.example.android.model.RepoSearchResponse

@@ -1,7 +1,6 @@
-package com.example.android.api
+package com.example.android.data.remote
 
 import android.content.Context
-import com.example.android.AuthTokenProvider
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +11,12 @@ import java.io.IOException
 fun provideAuthApi(): AuthApi
         = Retrofit.Builder()
     .baseUrl("https://github.com/")
-    .client(provideOkHttpClient(provideLoggingInterceptor(), null))
+    .client(
+        provideOkHttpClient(
+            provideLoggingInterceptor(),
+            null
+        )
+    )
     .addConverterFactory(GsonConverterFactory.create())
     .build()
     .create(AuthApi::class.java)
@@ -20,8 +24,16 @@ fun provideAuthApi(): AuthApi
 fun provideGithubApi(context: Context): GithubApi
         = Retrofit.Builder()
     .baseUrl("https://api.github.com/")
-    .client(provideOkHttpClient(provideLoggingInterceptor(),
-        provideAuthInterceptor(provideAuthTokenProvider(context))))
+    .client(
+        provideOkHttpClient(
+            provideLoggingInterceptor(),
+            provideAuthInterceptor(
+                provideAuthTokenProvider(
+                    context
+                )
+            )
+        )
+    )
     .addConverterFactory(GsonConverterFactory.create())
     .build()
     .create(GithubApi::class.java)

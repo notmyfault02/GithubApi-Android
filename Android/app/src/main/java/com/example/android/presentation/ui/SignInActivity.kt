@@ -1,4 +1,4 @@
-package com.example.android
+package com.example.android.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +8,10 @@ import android.widget.Button
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
-import com.example.android.api.provideAuthApi
+import com.example.android.BuildConfig
+import com.example.android.R
+import com.example.android.data.remote.AuthTokenProvider
+import com.example.android.data.remote.provideAuthApi
 import com.example.android.model.GithubAccessToken
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import org.jetbrains.anko.*
@@ -40,7 +43,8 @@ class SignInActivity : AppCompatActivity() {
                 .appendPath("oauth")
                 .appendPath("authorize")
                 .appendQueryParameter("client_id",
-                    BuildConfig.GITHUB_CLIENT_ID)
+                    BuildConfig.GITHUB_CLIENT_ID
+                )
                 .build()
 
             val intent = CustomTabsIntent.Builder().build()

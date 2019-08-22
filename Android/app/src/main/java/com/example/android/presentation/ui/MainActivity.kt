@@ -1,7 +1,9 @@
-package com.example.android
+package com.example.android.presentation.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.R
+import com.example.android.presentation.ui.search.SearchActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.startActivity
