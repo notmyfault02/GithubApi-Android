@@ -1,9 +1,18 @@
 package com.example.android.presentation.ui.search
 
-import com.example.android.presentation.ui.base.BasePresenter
+import io.reactivex.disposables.CompositeDisposable
 
-class SearchPresenter: BasePresenter {
-    override fun start() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+abstract class SearchPresenter<U: com.example.android.presentation.UserData> {
+
+    protected var compositeDisposable: CompositeDisposable? = null
+
+    var userData: U? = null
+        set(value) {
+            if(this.userData !== value) {
+                field = value
+                compositeDisposable = CompositeDisposable()
+            }
+        }
+
+    abstract fun getGithubUserList(q: String)
 }

@@ -1,39 +1,56 @@
 package com.example.android.presentation.ui.search
 
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.ProgressBar
-import android.widget.SearchView
-import android.widget.TextView
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.R
-import com.example.android.data.remote.GithubApi
-import com.example.android.model.RepoSearchResponse
+import com.example.android.presentation.SearchAdapter
+import com.example.android.presentation.UserData
+import com.example.android.presentation.model.RepoSearchResponse
+import com.example.android.presentation.model.User
+import org.koin.android.ext.android.inject
 
-class SearchActivity : AppCompatActivity(), SearchContract.View {
+class SearchActivity : AppCompatActivity(), UserDataList {
 
-    override lateinit var presenter: SearchContract.Presenter
+    private val presenter: SearchPresenter<UserData> by inject()
+    val items by lazy { ArrayList<User>() }
 
-    lateinit var rvList: RecyclerView
-    lateinit var progress: ProgressBar
-    lateinit var tvMessage: TextView
-    lateinit var menuSearch: MenuItem
-    lateinit var searchView: SearchView
-    lateinit var api: GithubApi
-    lateinit var searchCall: retrofit2.Call<RepoSearchResponse>
+    val searchAdapter by lazy { SearchAdapter(this, items) }
+
+    override fun searchGithubUser(searchWord: String) {
+        if (searchWord.isNullOrBlank()) {
+
+        }
+    }
+
+    private
+
+    var rvList = findViewById<RecyclerView>(R.id.rv_search_list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        rvList = findViewById(R.id.rv_search_list)
-        progress = findViewById(R.id.pgBar_search)
-        tvMessage = findViewById(R.id.tv_search_message)
+        rvList.layoutManager = LinearLayoutManager(this)
+        rvList.adapter = searchAdapter
 
-//        adapter = SearchAdapter()
-//        rvList.layoutManager = LinearLayoutManager(this)
-//        rvList.adapter = adapter
+    }
 
+    override fun onDataLoaded(storeResponse: RepoSearchResponse) {
+        rvList.adapter!!.apply {
+            items.clear()
+            items.addAll(storeResponse.items)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun onDataFailed() {
+        Log.d("test", "onDataFailed")
+        rvList.adapter!!.apply {
+            items.clear()
+            notifyDataSetChanged()
+        }
     }
 }

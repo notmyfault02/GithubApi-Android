@@ -8,7 +8,7 @@
                 android:paddingRight="12dp">
 
     <ImageView
-            android:id="@+id/ivItemRepositoryProfile"
+            android:id="@+id/ivItemUserProfile"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerVertical="true"
@@ -20,12 +20,12 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
-            android:layout_toEndOf="@+id/ivItemRepositoryProfile"
-            android:layout_toRightOf="@+id/ivItemRepositoryProfile"
+            android:layout_toEndOf="@+id/ivItemUserProfile"
+            android:layout_toRightOf="@+id/ivItemUserProfile"
             android:orientation="vertical">
 
         <TextView
-                android:id="@+id/tvItemRepositoryName"
+                android:id="@+id/tvItemUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -35,7 +35,7 @@
                 tools:text="Owner/Repository" />
 
         <TextView
-                android:id="@+id/tvItemRepositoryLanguage"
+                android:id="@+id/tvItemUserUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
