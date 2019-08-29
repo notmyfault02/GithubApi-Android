@@ -1,15 +1,18 @@
 package com.example.android.presentation.ui.search
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.R
-import com.example.android.presentation.SearchAdapter
 import com.example.android.presentation.UserData
 import com.example.android.presentation.model.RepoSearchResponse
 import com.example.android.presentation.model.User
+import com.example.android.presentation.ui.adapter.SearchAdapter
 import org.koin.android.ext.android.inject
 
 class SearchActivity : AppCompatActivity(), UserDataList {
@@ -25,17 +28,22 @@ class SearchActivity : AppCompatActivity(), UserDataList {
         }
     }
 
-    private
-
     var rvList = findViewById<RecyclerView>(R.id.rv_search_list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+    }
 
-        rvList.layoutManager = LinearLayoutManager(this)
-        rvList.adapter = searchAdapter
+    override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View? {
+        val view = rvList
+        view.apply {
+            layoutManager = LinearLayoutManager(this@SearchActivity, RecyclerView.VERTICAL, false)
+            setHasFixedSize(true)
+            adapter = searchAdapter
+        }
 
+        return view
     }
 
     override fun onDataLoaded(storeResponse: RepoSearchResponse) {
