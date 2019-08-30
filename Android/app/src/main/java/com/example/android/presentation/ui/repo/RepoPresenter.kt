@@ -8,7 +8,7 @@ abstract class RepoPresenter<U: UserData> {
 
     var userData: U? = null
         set(value) {
-            if(this.userData !== null) {
+            if(this.userData !== value) {
                 field = value
                 compositeDisposable = CompositeDisposable()
             }

@@ -1,4 +1,4 @@
-package com.example.android.presentation.ui.search
+package com.example.android.presentation.ui.repo
 
 import com.example.android.presentation.UserData
 import com.example.android.presentation.model.RepoSearchResponse

@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

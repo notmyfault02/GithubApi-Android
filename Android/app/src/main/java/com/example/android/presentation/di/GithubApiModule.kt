@@ -30,4 +30,4 @@ val apiModule: Module = module {
     }
 }
 
-val appModules = listOf(apiModule)
+val appModules = listOf(apiModule, userListModule)
