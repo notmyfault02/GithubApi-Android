@@ -3,6 +3,8 @@ package com.example.android.presentation.ui.repo
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.R
 import com.example.android.presentation.model.RepoSearchResponse
 import com.example.android.presentation.ui.adapter.RepoAdapter
@@ -18,11 +20,15 @@ class RepoActivity : AppCompatActivity(), UserDataList {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repo)
-        //setSupportActionBar(toolbar)
         presenter.userData = this
 
-        rv_repo.adapter = repoAdapter
+        rv_repo.apply {
+            layoutManager = LinearLayoutManager(this@RepoActivity, RecyclerView.VERTICAL, false)
+            rv_repo.setHasFixedSize(true)
+            rv_repo.adapter = repoAdapter
+        }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_activity_search, menu)

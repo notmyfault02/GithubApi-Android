@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface GithubApi {
 
-    @GET("search/users")
+    @GET("/search/users")
     fun getUser(
         @Query("q") query: String,
         @Query("sort") sort: String,

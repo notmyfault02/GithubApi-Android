@@ -9,10 +9,10 @@ import com.example.android.R
 import com.example.android.presentation.model.User
 import kotlinx.android.synthetic.main.item_user.view.*
 
-class RepoAdapter(val context: Context?, val items: ArrayList<User>): RecyclerView.Adapter<RepoAdapter.RepoViewHolder>() {
+class RepoAdapter(var context: Context?, val items: ArrayList<User>): RecyclerView.Adapter<RepoAdapter.RepoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
-        return RepoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false))
+        return RepoViewHolder(LayoutInflater.from(context).inflate(R.layout.item_user, parent, false))
     }
 
     override fun getItemCount() = items.size
@@ -20,7 +20,7 @@ class RepoAdapter(val context: Context?, val items: ArrayList<User>): RecyclerVi
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         holder.run{
             items[position].let {
-                bind(items[position])
+                bind(it)
             }
         }
     }
@@ -31,6 +31,8 @@ class RepoAdapter(val context: Context?, val items: ArrayList<User>): RecyclerVi
                 com.bumptech.glide.Glide.with(context!!)
                     .load(user.avatarUrl)
                     .into(ivItemUserProfile)
+
+                tvItemUserName.text = user.login
             }
         }
     }

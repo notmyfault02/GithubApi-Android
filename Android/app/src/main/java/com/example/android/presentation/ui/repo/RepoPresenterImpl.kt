@@ -8,7 +8,7 @@ class RepoPresenterImpl(val apiService: GithubApi): RepoPresenter<UserDataList>(
 
     override fun getGithubUser(q: String) {
         compositeDisposable?.add(apiService.getUser(q, "repository", "desc")
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ userData?.onDataLoaded(it) }, {userData?.onDataFailed()}))
     }
